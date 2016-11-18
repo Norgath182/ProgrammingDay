@@ -33,25 +33,47 @@ int find(int find,int arr[]){
 	return 0;
 }
 
+void removeCard(int *playerHand,int *playerLoc, int loc){
+	while(playerHand[loc]!=0){
+		playerHand[loc]=playerHand[loc+1];
+		playerLoc--;
+		loc++;
+	}
+}
+
 void playerDoubles(int *playerHand,int *playerLoc){
 	int x=0,t=0;
-	int temp[20];
+	int temp[20][2]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+					{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	printf("start double search\n");
 	while(playerHand[x]!=0){
 		if(!find(playerHand[x],temp)){
-			temp[t]=playerHand[x];
+			temp[t][0]=playerHand[x];
+			temp[t][1]=1;
+			printf("Found new\n");
 			t++;
 		}else{
-			playerLoc--;
-			x--;
+			
+			printf("Found double\n");
 		}
 		x++;
 	}
+	printf("end double search,start double remove\n");
+	for(int t2=0;t2<=t;t2++){
+		x=0;
+		while(playerHand[x]!=0){
+			if(playerHand[x]==temp[t2][0]){
+				removeCard(playerHand,playerLoc,x);
+			}
+			x++;
+		}
+	}
+	printf("end double remove\n");
 }
 
 int main(){
 	srand(time(NULL));
-	int playerLoc,opponentLoc,
-		game=1;
+	int playerLoc,opponentLoc, game=1;
 	int playerHand[20], opponentHand[20];
 	char gus;
 	
@@ -72,11 +94,12 @@ int main(){
 	printPlayerHand(playerHand);
 	//printArray(opponentHand);
 	
-	while(game){
-		/*
-		if(
-		
-		*/
+	playerDoubles(playerHand,playerLoc);
+	printf("Your hand without doubles is:\n");
+	printPlayerHand(playerHand);
+	
+	/*while(game){
+		if...
 		
 		printf("Would you like to continue? Enter 'y' to continue or 'n' to stop.\n");
 		clearBuffer();
@@ -88,7 +111,7 @@ int main(){
 			scanf("%c",&gus);
 		}
 		game=(gus=='y');
-	}
+	}*/
 	
 	return 0;
 }
